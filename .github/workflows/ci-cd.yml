@@ -30,7 +30,6 @@ jobs:
         working-directory: ./frontend
         run: |
           npm install
-          npm run build
 
       - name: Deploy Backend to Azure
         uses: azure/webapps-deploy@v2
