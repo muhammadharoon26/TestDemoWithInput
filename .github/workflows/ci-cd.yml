@@ -76,7 +76,6 @@ jobs:
         working-directory: ./backend
         run: |
           npm install
-          cp .env ./backend/.env  # Ensure .env is included
           echo "[config]" > ./backend/.deployment
           echo "command = node app.js" >> ./backend/.deployment
 
