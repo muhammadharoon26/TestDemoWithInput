@@ -40,9 +40,9 @@ jobs:
           publish-profile: ${{ secrets.AZURE_BACKEND_PUBLISH_PROFILE }}
           package: ./backend
 
-      - name: Deploy Frontend to Azure
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: trulee-frontend-app
-          publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
-          package: ./frontend/build
+      # - name: Deploy Frontend to Azure
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: trulee-frontend-app
+      #     publish-profile:  secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
+      #     package: ./frontend/build
