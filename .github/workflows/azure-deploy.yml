@@ -37,10 +37,13 @@ jobs:
         run: npm ci
         working-directory: ./frontend
       - name: Build Frontend
-        run: npm run build && cp ./frontend/public/web.config ./frontend/build/
-        working-directory: .
+        run: npm run build && cp ./public/web.config ./build/
+        working-directory: ./frontend  # Set to frontend directory
         env:
           REACT_APP_API_URL: https://my-react-app-backend-f5eredcae7fababt.canadacentral-01.azurewebsites.net/api/data
+      - name: Verify Build Output
+        run: ls -la ./frontend/build
+        working-directory: .
       - name: Deploy Frontend to Azure
         uses: azure/webapps-deploy@v2
         with:
