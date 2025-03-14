@@ -12,7 +12,6 @@ function App() {
     <div>
       <h1>Data Management App</h1>
       <DataForm onDataSave={handleDataSave} />
-  
       {/* <ul>
         {data.map((item, index) => (
           <li key={index}>{item.data}</li>
