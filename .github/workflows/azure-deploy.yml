@@ -37,12 +37,14 @@ jobs:
         run: npm ci
         working-directory: ./frontend
       - name: Build Frontend
-        run: npm run build
-        working-directory: ./frontend
+        run: npm run build && cp ./frontend/public/web.config ./frontend/build/
+        working-directory: .
+        env:
+          REACT_APP_API_URL: https://my-react-app-backend-f5eredcae7fababt.canadacentral-01.azurewebsites.net/api/data
       - name: Deploy Frontend to Azure
         uses: azure/webapps-deploy@v2
         with:
           app-name: my-react-app-frontend
           slot-name: production
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
-          package: ./frontend
+          package: ./frontend/build
