@@ -45,4 +45,4 @@ jobs:
           app-name: my-react-app-frontend
           slot-name: production
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
-          package: ./frontend/build
+          package: ./frontend
