@@ -59,3 +59,21 @@ jobs:
   #         clean: true  # Force clean deployment
   #       env:
   #         ACTIONS_STEP_DEBUG: true
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Build Frontend
+      run: |
+        cd frontend
+        npm install
+        npm run build
+
+    - name: Deploy Frontend to Azure
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'my-react-app-frontend'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
