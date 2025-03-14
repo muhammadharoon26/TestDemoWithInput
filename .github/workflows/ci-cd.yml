@@ -1,54 +1,3 @@
-# name: Deploy Full-Stack Application to Azure
-
-# on:
-#   push:
-#     branches:
-#       - master
-
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-
-#     strategy:
-#       matrix:
-#         node-version: [18.x]
-
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-
-#       - name: Set up Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: matrix.node-version }}
-
-#       - name: Build Backend
-#         working-directory: ./backend
-#         run: |
-#           npm install
-
-#       - name: Build Frontend
-#         working-directory: ./frontend
-#         run: |
-#           npm install
-#           npm run build
-
-#       - name: Deploy Backend to Azure
-#         uses: azure/webapps-deploy@v2
-#         with:
-#           app-name: trulee-backend-app
-#           publish-profile: secrets.AZURE_BACKEND_PUBLISH_PROFILE }}
-#           package: ./backend
-
-#       - name: Deploy Frontend to Azure
-#         uses: azure/webapps-deploy@v2
-#         with:
-#           app-name: trulee-frontend-app
-#           publish-profile: #  secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
-#           package: ./frontend/build
-
-
-
 name: Deploy Full-Stack Application to Azure
 
 on:
@@ -77,8 +26,6 @@ jobs:
         working-directory: ./backend
         run: |
           npm install
-          echo "[config]" > ./backend/.deployment
-          echo "command = node app.js" >> ./backend/.deployment
 
       - name: Build Frontend
         working-directory: ./frontend

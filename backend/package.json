@@ -2,9 +2,9 @@
   "name": "my-react-app-backend",
   "version": "1.0.0",
   "description": "Backend for my React app using Express and MongoDB",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
