@@ -107,34 +107,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  const dbState = mongoose.connection.readyState;
-
-  // readyState meanings:
-  // 0 = disconnected
-  // 1 = connected
-  // 2 = connecting
-  // 3 = disconnecting
-
-  let status = 'disconnected';
-  switch (dbState) {
-    case 0:
-      status = 'disconnected';
-      break;
-    case 1:
-      status = 'connected';
-      break;
-    case 2:
-      status = 'connecting';
-      break;
-    case 3:
-      status = 'disconnecting';
-      break;
-  }
-
-  res.status(200).json({
-    backend: 'running',
-    database: status
-  });
+  res.status(200).json({ status: 'OK', message: 'Backend is running' });
 });
 
 // Connect to MongoDB
