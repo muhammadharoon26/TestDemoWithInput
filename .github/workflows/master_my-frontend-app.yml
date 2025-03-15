@@ -127,7 +127,7 @@ jobs:
 
 #       - name: Start backend in the background
 #         env:
-#           AZURE_COSMOS_CONNECTIONSTRING: mongodb://myreactappdb:QR795LvAMpBRKpRmPGKakratA2T67hFDvfViN9XC8KMSlbVuO56glGjuKg23mXcpxPaBddqBSKf8ACDbKny6hQ==@myreactappdb.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@myreactappdb@
+#           AZURE_COSMOS_CONNECTIONSTRING: 
 #         run: (cd backend && echo "AZURE_COSMOS_CONNECTIONSTRING=$AZURE_COSMOS_CONNECTIONSTRING" > config.env  && npm start &)
 
 #       - name: Start React app in the background
