@@ -74,7 +74,7 @@ const DataForm = ({ onDataSave }) => {
   const [savedData, setSavedData] = useState([]);
   const [error, setError] = useState(null);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/data';
+  const API_URL = process.env.REACT_APP_API_URL
 
   const handleInputChange = (e) => {
     setInputData(e.target.value);
