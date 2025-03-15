@@ -127,7 +127,6 @@ jobs:
 
 #       - name: Start backend in the background
 #         env:
-#           AZURE_COSMOS_CONNECTIONSTRING: 
 #         run: (cd backend && echo "AZURE_COSMOS_CONNECTIONSTRING=$AZURE_COSMOS_CONNECTIONSTRING" > config.env  && npm start &)
 
 #       - name: Start React app in the background
