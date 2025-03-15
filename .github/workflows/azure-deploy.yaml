@@ -63,20 +63,23 @@ jobs:
   deploy-frontend:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Debug Directory Structure
+        run: ls -la
+      - name: Install Frontend Dependencies
+        run: npm install
+        working-directory: ./frontend
       - name: Build Frontend
-        run: |
-          cd frontend
-          npm install
-          npm run build
-      - name: Prepare Deployment Package
-        run: |
-          mkdir -p deploy_frontend
-          cp frontend/server.js deploy_frontend/
-          cp frontend/package.json deploy_frontend/
-          cp -r frontend/build deploy_frontend/build
+        run: npm run build
+        working-directory: ./frontend
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v2
         with:
           app-name: my-react-app-frontend
+          slot-name: production
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
-          package: ./deploy_frontend
+          package: ./frontend
