@@ -75,7 +75,7 @@ const DataForm = ({ onDataSave }) => {
   const [savedData, setSavedData] = useState([]);
   const [error, setError] = useState(null);
 
-  const API_URL = process.env.REACT_APP_API_URL
+  const API_URL = "https://my-backend-app-gda9hcbjdugqgphj.canadacentral-01.azurewebsites.net/api/data"
 
   const handleInputChange = (e) => {
     setInputData(e.target.value);
