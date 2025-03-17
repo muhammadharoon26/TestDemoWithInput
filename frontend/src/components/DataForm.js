@@ -14,7 +14,7 @@ const DataForm = ({ onDataSave }) => {
   const handleSave = async () => {
     if (!inputData) return;
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(process.env.REACT_APP_API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const DataForm = ({ onDataSave }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(API_URL);
+      const response = await fetch(process.env.REACT_APP_API_URL);
       if (!response.ok) throw new Error('Failed to fetch data');
       const result = await response.json();
       setSavedData(result);
