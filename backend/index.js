@@ -6,7 +6,7 @@ const connectDB = require('./config/db');
 const app = express();
 
 app.use(cors({
-  origin: 'https://my-frontend-app-eufggghjd0e3dcbt.canadacentral-01.azurewebsites.net'
+  origin: process.env.FRONTEND_URL
 }));
 
 app.use(express.json());
