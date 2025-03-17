@@ -15,6 +15,7 @@ connectDB().then(() => {
   app.use('/api/data', dataRoutes);
 
   const port = process.env.PORT || 5000;
+  console.log('FRONTEND_URL:', process.env.FRONTEND_URL); // Debug the URL
   app.listen(port, () => {
     console.log(`Backend server running on port ${port}`);
   }).on('error', (err) => {

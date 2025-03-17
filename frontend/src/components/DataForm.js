@@ -5,47 +5,11 @@ const DataForm = ({ onDataSave }) => {
   const [savedData, setSavedData] = useState([]);
   const [error, setError] = useState(null);
 
-  // const API_URL = "https://my-backend-app-gda9hcbjdugqgphj.canadacentral-01.azurewebsites.net/api/data"
-
   const handleInputChange = (e) => {
     setInputData(e.target.value);
   };
-
-  // const handleSave = async () => {
-  //   if (!inputData) return;
-  //   try {
-  //     const response = await fetch(process.env.REACT_APP_API_URL, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ data: inputData }),
-  //     });
-  //     if (!response.ok) throw new Error('Failed to save data');
-  //     const result = await response.json();
-  //     setInputData('');
-  //     onDataSave(result.data);
-  //     setError(null);
-  //   } catch (error) {
-  //     console.error('Error saving data:', error);
-  //     setError('Failed to save data');
-  //   }
-  // };
-
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetch(process.env.REACT_APP_API_URL);
-  //     if (!response.ok) throw new Error('Failed to fetch data');
-  //     const result = await response.json();
-  //     setSavedData(result);
-  //     setError(null);
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //     setError('Failed to fetch data');
-  //   }
-  // };
   const handleSave = async () => {
-    console.log('API URL:', process.env.REACT_APP_API_URL); // Debug the URL
+    console.log('REACT_APP_API_URL:', process.env.REACT_APP_API_URL); // Debug the URL
     if (!inputData) return;
     try {
       const response = await fetch(process.env.REACT_APP_API_URL, {
