@@ -10,6 +10,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
+
 // Use process.env.PORT if available, otherwise default to 3000
 const port = process.env.PORT || 3000;
 
