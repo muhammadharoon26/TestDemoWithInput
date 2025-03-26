@@ -192,7 +192,7 @@ jobs:
         working-directory: ./frontend
         run: |
           mkdir deployment
-          mv build package.json server.js node_modules deployment/
+          mv build package.json package-lock.json server.js node_modules deployment/
           cd deployment && zip -r ../release.zip .  # 🚀 Faster zipping
 
       - name: Upload artifact for deployment job
