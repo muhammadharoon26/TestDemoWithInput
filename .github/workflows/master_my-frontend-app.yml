@@ -200,7 +200,7 @@ jobs:
         run: |
           mkdir deployment
           mv build package.json package-lock.json server.js deployment/
-          cd deployment && zip -r ../release.zip
+          cd deployment && zip -r ../release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
