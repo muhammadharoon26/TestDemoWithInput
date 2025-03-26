@@ -368,14 +368,6 @@ jobs:
         working-directory: ./frontend
         run: npm prune --omit=dev
 
-      - name: Install node-prune
-        run: |
-          curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
-
-      - name: Run node-prune
-        working-directory: ./frontend
-        run: node-prune
-
       - name: Prepare deployment directory
         working-directory: ./frontend
         run: |
