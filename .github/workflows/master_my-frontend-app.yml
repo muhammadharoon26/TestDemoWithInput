@@ -182,7 +182,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-          cache: 'npm'  # 🚀 Enables caching to speed up `npm install`
+          # cache: 'npm'  # 🚀 Enables caching to speed up `npm install`
         
       - name: Install dependencies and build
         working-directory: ./frontend
