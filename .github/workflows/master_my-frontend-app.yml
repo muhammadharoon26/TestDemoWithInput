@@ -56,6 +56,104 @@
 #           package: .
 #           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+# name: Build and deploy Node.js app to Azure Web App - frontend-001
+
+# on:
+#   push:
+#     branches:
+#       - master
+#   workflow_dispatch:
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '20.x'
+
+#       - name: Install dependencies and build
+#         working-directory: ./frontend
+#         env:
+#           CI: false
+#           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }
+#         run: |
+#           npm install
+#           npm run build --if-present --max-warnings=50
+#           npm prune --production
+
+#       - name: Zip artifact for deployment (without node_modules)
+#         working-directory: ./frontend
+#         run: zip -r release.zip build/ package.json server.js
+
+#       - name: Upload artifact for deployment job
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: node-app
+#           path: ./frontend/release.zip
+
+#   deploy:
+#     runs-on: ubuntu-latest
+#     needs: build
+#     environment:
+#       name: 'Production'
+#       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }
+
+#     steps:
+#       - name: Download artifact from build job
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: node-app
+
+#       - name: Unzip artifact for deployment
+#         run: unzip release.zip
+
+#       - name: Install dependencies on Azure
+#         run: npm install --production  # Installs only production dependencies
+
+#       - name: Deploy to Azure Web App
+#         id: deploy-to-webapp
+#         uses: azure/webapps-deploy@v3
+#         with:
+#           app-name: 'my-frontend-app'
+#           slot-name: 'Production'
+#           package: .
+#           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 name: Build and deploy Node.js app to Azure Web App - frontend-001
 
 on:
@@ -78,6 +176,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
+          cache: 'npm'  # 🚀 Enables caching to speed up `npm install`
 
       - name: Install dependencies and build
         working-directory: ./frontend
@@ -85,13 +184,16 @@ jobs:
           CI: false
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: |
-          npm install
+          npm ci  # 🚀 Faster & more reliable than `npm install`
           npm run build --if-present --max-warnings=50
-          npm prune --production
+          npm prune --production  # Keep only production dependencies
 
-      - name: Zip artifact for deployment (without node_modules)
+      - name: Prepare artifact for deployment
         working-directory: ./frontend
-        run: zip -r release.zip build/ package.json server.js
+        run: |
+          mkdir deployment
+          mv build package.json server.js node_modules deployment/
+          cd deployment && zip -r ../release.zip .  # 🚀 Faster zipping
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -114,9 +216,6 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-
-      - name: Install dependencies on Azure
-        run: npm install --production  # Installs only production dependencies
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
