@@ -234,6 +234,101 @@
 #           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }}
 
 
+# name: Build and deploy Node.js app to Azure Web App - frontend-001
+
+# on:
+#   push:
+#     branches:
+#       - master
+#   workflow_dispatch:
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '20.x'
+#           cache: 'npm'
+#           cache-dependency-path: frontend/package-lock.json
+
+#       - name: Install dependencies and build
+#         working-directory: ./frontend
+#         env:
+#           CI: false
+#           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+#         run: |
+#           npm ci --prefer-offline --no-audit
+#           npm update
+#           npm run build --if-present
+#           npm prune --omit=dev
+
+#       # - name: Prepare artifact for deployment
+#       #   working-directory: ./frontend
+#       #   run: |
+#       #     mkdir deployment
+#       #     cp -r build package.json package-lock.json server.js deployment/
+#       #     cd deployment && zip -r -9 ../release.zip .
+
+#       # - name: Upload artifact for deployment job
+#       #   uses: actions/upload-artifact@v4
+#       #   with:
+#       #     name: node-app
+#       #     path: ./frontend/release.zip
+#       - name: Zip artifact for deployment
+#         working-directory: ./frontend
+#         run: zip -r release.zip . -x "node_modules/*"
+
+#       - name: Upload artifact for deployment job
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: node-app
+#           path: ./frontend/release.zip
+
+#   deploy:
+#     runs-on: ubuntu-latest
+#     needs: build
+#     environment:
+#       name: 'Production'
+#       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+#     steps:
+#       - name: Download artifact from build job
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: node-app
+
+#       - name: Unzip artifact for deployment
+#         run: unzip -q release.zip
+
+#       - name: Install dependencies
+#         run: |
+#           npm i --omit=dev
+#           npm update
+
+#       - name: Deploy to Azure Web App
+#         id: deploy-to-webapp
+#         uses: azure/webapps-deploy@v3
+#         with:
+#           app-name: 'my-frontend-app'
+#           slot-name: 'Production'
+#           package: .
+#           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }}
+#           clean: true
+
+
+
+
+
+
+
 name: Build and deploy Node.js app to Azure Web App - frontend-001
 
 on:
@@ -267,23 +362,30 @@ jobs:
         run: |
           npm ci --prefer-offline --no-audit
           npm run build --if-present
-          npm prune --omit=dev
 
-      # - name: Prepare artifact for deployment
-      #   working-directory: ./frontend
-      #   run: |
-      #     mkdir deployment
-      #     cp -r build package.json package-lock.json server.js deployment/
-      #     cd deployment && zip -r -9 ../release.zip .
-
-      # - name: Upload artifact for deployment job
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: node-app
-      #     path: ./frontend/release.zip
-      - name: Zip artifact for deployment
+      - name: Prune dev dependencies
         working-directory: ./frontend
-        run: zip -r release.zip . -x "node_modules/*"
+        run: npm prune --omit=dev
+
+      - name: Install node-prune
+        run: |
+          curl -sfL https://install.goreleaser.com/github.com/tj/node-prune.sh | bash -s -- -b /usr/local/bin
+
+      - name: Run node-prune
+        working-directory: ./frontend
+        run: node-prune
+
+      - name: Prepare deployment directory
+        working-directory: ./frontend
+        run: |
+          mkdir -p deployment
+          cp -r build deployment/
+          cp -r node_modules deployment/
+          cp server.js package.json deployment/
+
+      - name: Zip artifact for deployment
+        working-directory: ./frontend/deployment
+        run: zip -r ../release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -306,9 +408,6 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip -q release.zip
-
-      # - name: Install dependencies
-      #   run: npm i --production
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
