@@ -174,7 +174,7 @@ jobs:
 
       - name: Debug - Check package-lock.json
         working-directory: ./frontend
-        run: ls -l ./frontend
+        run: ls -l
         
       - name: Set up Node.js
         uses: actions/setup-node@v3
