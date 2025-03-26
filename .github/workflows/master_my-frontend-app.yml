@@ -273,7 +273,7 @@ jobs:
         working-directory: ./frontend
         run: |
           mkdir deployment
-          cp -r build package.json package-lock.json server.js node_modules deployment/
+          cp -r build package.json package-lock.json server.js deployment/
           cd deployment && zip -r -9 ../release.zip .
 
       - name: Upload artifact for deployment job
