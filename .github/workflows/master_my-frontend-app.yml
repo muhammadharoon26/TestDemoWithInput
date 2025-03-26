@@ -172,15 +172,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Debug - Check package-lock.json
+        working-directory: ./frontend
+        run: ls -l
+        
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-          # cache: 'npm'  # 🚀 Enables caching to speed up `npm install`
-
-      - name: Debug - Check package-lock.json
-        working-directory: ./frontend
-        run: ls -l
+          cache: 'npm'  # 🚀 Enables caching to speed up `npm install`
         
       - name: Install dependencies and build
         working-directory: ./frontend
