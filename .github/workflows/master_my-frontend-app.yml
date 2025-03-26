@@ -27,7 +27,7 @@ jobs:
       - name: Zip artifact for deployment
         working-directory: ./frontend
         run: |
-          zip -r release.zip server.js build/
+          zip -r release.zip server.js package.json build/
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
