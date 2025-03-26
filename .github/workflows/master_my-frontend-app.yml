@@ -174,7 +174,7 @@ jobs:
 
       - name: Debug - Check package-lock.json
         working-directory: ./frontend
-        run: ls -l
+        run: ls -l ./frontend
         
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -188,7 +188,7 @@ jobs:
           CI: false
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: |
-          npm ci  # 🚀 Faster & more reliable than `npm install`
+          npm i  # 🚀 Faster & more reliable than `npm install`
           npm run build --if-present --max-warnings=50
           npm prune --production  # Keep only production dependencies
 
@@ -196,7 +196,7 @@ jobs:
         working-directory: ./frontend
         run: |
           mkdir deployment
-          mv build package.json package-lock.json server.js node_modules deployment/
+          mv build package.json package-lock.json server.js deployment/
           cd deployment && zip -r ../release.zip .  # 🚀 Faster zipping
 
       - name: Upload artifact for deployment job
