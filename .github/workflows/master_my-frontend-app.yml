@@ -154,6 +154,86 @@
 
 
 
+# name: Build and deploy Node.js app to Azure Web App - frontend-001
+
+# on:
+#   push:
+#     branches:
+#       - master
+#   workflow_dispatch:
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: read
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+#         # Removed 'path: ./frontend' to checkout to the root directory
+
+#       - name: Debug - Check package-lock.json
+#         working-directory: ./frontend
+#         run: ls -l
+        
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+        
+#         with:
+#           node-version: '20.x'
+#           # cache: 'npm'  # 🚀 Enables caching to speed up `npm install`
+        
+        
+#       - name: Install dependencies and build
+#         working-directory: ./frontend
+#         env:
+#           CI: false
+#           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+#         run: |
+#           npm ci
+#           npm run build --if-present
+#           npm prune --production  # Keep only production dependencies
+
+#       - name: Prepare artifact for deployment
+#         working-directory: ./frontend
+#         run: |
+#           mkdir deployment
+#           mv build package.json package-lock.json server.js deployment/
+#           cd deployment && zip -r ../release.zip .
+
+#       - name: Upload artifact for deployment job
+#         uses: actions/upload-artifact@v4
+#         with:
+#           name: node-app
+#           path: ./frontend/release.zip
+
+#   deploy:
+#     runs-on: ubuntu-latest
+#     needs: build
+#     environment:
+#       name: 'Production'
+#       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+#     steps:
+#       - name: Download artifact from build job
+#         uses: actions/download-artifact@v4
+#         with:
+#           name: node-app
+
+#       - name: Unzip artifact for deployment
+#         run: unzip release.zip
+
+#       - name: Deploy to Azure Web App
+#         id: deploy-to-webapp
+#         uses: azure/webapps-deploy@v3
+#         with:
+#           app-name: 'my-frontend-app'
+#           slot-name: 'Production'
+#           package: .
+#           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }}
+
+
 name: Build and deploy Node.js app to Azure Web App - frontend-001
 
 on:
@@ -171,27 +251,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        # Removed 'path: ./frontend' to checkout to the root directory
 
-      - name: Debug - Check package-lock.json
-        working-directory: ./frontend
-        run: ls -l
-        
       - name: Set up Node.js
         uses: actions/setup-node@v3
-        
         with:
           node-version: '20.x'
-          # cache: 'npm'  # 🚀 Enables caching to speed up `npm install`
-        
-        
+          cache: 'npm'  # Enable caching for faster npm installs
+
       - name: Install dependencies and build
         working-directory: ./frontend
         env:
           CI: false
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: |
-          npm ci
+          npm ci --prefer-offline --no-audit  # Faster install with caching
           npm run build --if-present
           npm prune --production  # Keep only production dependencies
 
@@ -199,8 +272,9 @@ jobs:
         working-directory: ./frontend
         run: |
           mkdir deployment
-          mv build package.json package-lock.json server.js deployment/
-          cd deployment && zip -r ../release.zip .
+          cp -r build package.json package-lock.json server.js node_modules deployment/
+          cd deployment
+          zip -r -9 ../release.zip .  # Maximum compression for smaller file size
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -222,7 +296,7 @@ jobs:
           name: node-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: unzip -q release.zip  # Quiet unzip to reduce log noise
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
