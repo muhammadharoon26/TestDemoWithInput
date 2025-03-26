@@ -172,7 +172,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          path: frontend  # Checkout directly into the 'frontend' subdirectory
+          path: ./frontend  # Checkout directly into the 'frontend' subdirectory
 
       - name: Debug - Check package-lock.json
         working-directory: ./frontend
