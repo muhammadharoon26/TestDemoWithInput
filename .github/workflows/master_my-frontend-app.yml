@@ -67,7 +67,7 @@ jobs:
         run: |
           echo '#!/bin/bash' > install_dependencies.sh
           echo 'npm cache clean --force' >> install_dependencies.sh
-          echo 'npm install --production' >> install_dependencies.sh
+          echo 'npm install --omit=dev' >> install_dependencies.sh
           echo 'echo "Dependencies installed successfully."' >> install_dependencies.sh
           chmod +x install_dependencies.sh
   
@@ -75,7 +75,11 @@ jobs:
         run: |
           curl -T install_dependencies.sh --ftp-create-dirs --ssl-reqd -u '${{ secrets.AZURE_FTPS_USERNAME }}:${{ secrets.AZURE_FTPS_PASSWORD }}' "ftps://waws-prod-yt1-069.ftp.azurewebsites.windows.net/site/wwwroot/frontend/install_dependencies.sh"
 
+      - name: cd to frontend dir
+        run: |
+          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"cd site/wwwroot/frontend\"}" --verbose
+
       - name: Execute install_dependencies.sh on Azure Web App
         run: |
-          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash site/wwwroot/frontend/install_dependencies.sh\"}" --verbose
+          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash install_dependencies.sh\"}" --verbose
   
