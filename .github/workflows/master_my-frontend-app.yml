@@ -24,7 +24,7 @@ jobs:
         env:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: |
-          npm install
+          yarn install
           npm run build --if-present
 
       - name: Zip artifact for deployment (excluding node_modules)
@@ -76,5 +76,5 @@ jobs:
 
       - name: Execute npm i on Azure Web App
         run: |
-          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash -c \\\"cd /home/site/wwwroot/frontend && npm ci --production\\\"\"}" --verbose
+          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash -c \\\"cd /home/site/wwwroot/frontend && yarn install\\\"\"}" --verbose
   
