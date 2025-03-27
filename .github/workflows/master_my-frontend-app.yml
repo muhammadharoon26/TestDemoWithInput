@@ -13,6 +13,7 @@ jobs:
       contents: read
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
@@ -26,7 +27,7 @@ jobs:
           npm install
           npm run build --if-present
 
-      - name: Zip artifact for deployment
+      - name: Zip artifact for deployment (excluding node_modules)
         working-directory: ./frontend
         run: |
           zip -r release.zip server.js package.json build/
@@ -61,3 +62,8 @@ jobs:
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }}
           clean: true
+
+      - name: Install dependencies on Azure Web App
+        run: |
+          curl -T install_dependencies.sh --ftp-create-dirs -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" "ftp://waws-prod-blu-001.ftp.azurewebsites.windows.net/site/wwwroot/install_dependencies.sh"
+          curl -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" "ftp://waws-prod-blu-001.scm.azurewebsites.net/api/command" -H "Content-Type: application/json" --data-binary '{"command":"bash site/wwwroot/install_dependencies.sh"}'
