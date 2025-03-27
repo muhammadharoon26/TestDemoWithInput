@@ -76,7 +76,7 @@ jobs:
         run: |
           curl -T install_dependencies.sh --ftp-create-dirs --ssl-reqd -u '${{ secrets.AZURE_FTPS_USERNAME }}:${{ secrets.AZURE_FTPS_PASSWORD }}' "ftps://waws-prod-yt1-069.ftp.azurewebsites.windows.net/site/wwwroot/frontend/install_dependencies.sh"
 
-      - name: Execute install_dependencies.sh on Azure Web App
-        run: |
-          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"cd /site/wwwroot/frontend && bash install_dependencies.sh\"}" --verbose
+          - name: Execute install_dependencies.sh on Azure Web App
+          run: |
+            curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash -c 'cd /site/wwwroot/frontend && bash install_dependencies.sh'\"}" --verbose
   
