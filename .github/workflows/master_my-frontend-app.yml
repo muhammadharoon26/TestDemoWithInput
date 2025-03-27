@@ -73,12 +73,12 @@ jobs:
   
       - name: Upload install_dependencies.sh to Azure Web App via FTPS
         run: |
-          curl -T install_dependencies.sh --ftp-create-dirs -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" "ftp://waws-prod-blu-001.ftp.azurewebsites.windows.net/site/wwwroot/install_dependencies.sh"
+          curl -T install_dependencies.sh --ftp-create-dirs --ssl-reqd -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" "ftps://waws-prod-yt1-069.ftp.azurewebsites.windows.net/site/wwwroot/frontend/install_dependencies.sh"
 
       - name: Execute install_dependencies.sh on Azure Web App
         run: |
           curl -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" \
-            "https://waws-prod-blu-001.scm.azurewebsites.net/api/command" \
+            "ftps://waws-prod-yt1-069.ftp.azurewebsites.windows.net/site/wwwroot/frontend" \
             -H "Content-Type: application/json" \
-            --data-binary '{"command":"bash site/wwwroot/install_dependencies.sh"}'
+            --data-binary '{"command":"bash site/wwwroot/frontend/install_dependencies.sh"}'
   
