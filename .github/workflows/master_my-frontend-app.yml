@@ -30,7 +30,7 @@ jobs:
       - name: Zip artifact for deployment (excluding node_modules)
         working-directory: ./frontend
         run: |
-          zip -r release.zip server.js package.json build/
+          zip -r release.zip server.js package.json package-lock.json build/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -68,7 +68,7 @@ jobs:
           echo '#!/bin/bash' > install_dependencies.sh
           echo 'echo "Current directory: $(/bin/pwd)"' >> install_dependencies.sh
           echo 'npm cache clean --force' >> install_dependencies.sh
-          echo 'npm install --omit=dev --verbose' >> install_dependencies.sh
+          echo 'npm ci' >> install_dependencies.sh
           echo 'echo "Dependencies installed successfully."' >> install_dependencies.sh
           chmod +x install_dependencies.sh
   
