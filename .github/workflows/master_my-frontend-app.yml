@@ -80,5 +80,5 @@ jobs:
           curl -u '${{ secrets.AZURE_FTPS_USERNAME }}:${{ secrets.AZURE_FTPS_PASSWORD }}' \
           "ftps://waws-prod-yt1-069.ftp.azurewebsites.windows.net/site/wwwroot/frontend" \
             -H "Content-Type: application/json" \
-            --data-binary '{"command":"bash site/wwwroot/frontend/install_dependencies.sh"}'
+            --data-binary '{"command":"bash install_dependencies.sh"}'
   
