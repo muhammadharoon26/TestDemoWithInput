@@ -77,5 +77,8 @@ jobs:
 
       - name: Execute install_dependencies.sh on Azure Web App
         run: |
-          curl -u '${{ secrets.AZURE_FTPS_USERNAME }}:${{ secrets.AZURE_FTPS_PASSWORD }}' "ftps://waws-prod-yt1-069.ftp.azurewebsites.windows.net/site/wwwroot/frontend/install_dependencies.sh" "Content-Type: application/json" --data-binary '{"command":"bash site/wwwroot/frontend/install_dependencies.sh"}'
+          curl -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" \
+            "ftps://waws-prod-yt1-069.ftp.azurewebsites.windows.net/site/wwwroot/frontend" \
+            -H "Content-Type: application/json" \
+            --data-binary '{"command":"bash site/wwwroot/frontend/install_dependencies.sh"}'
   
