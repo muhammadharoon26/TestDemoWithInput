@@ -66,7 +66,6 @@ jobs:
       - name: Create install_dependencies.sh
         run: |
           echo '#!/bin/bash' > install_dependencies.sh
-          echo 'cd /home/site/wwwroot' >> install_dependencies.sh
           echo 'npm install --production' >> install_dependencies.sh
           echo 'echo "Dependencies installed successfully."' >> install_dependencies.sh
           chmod +x install_dependencies.sh
