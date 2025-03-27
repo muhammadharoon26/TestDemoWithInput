@@ -61,8 +61,6 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }}
-          clean: true
-
       # - name: Create install_dependencies.sh
       #   run: |
       #     echo '#!/bin/bash' > install_dependencies.sh
