@@ -30,7 +30,7 @@ jobs:
       - name: Zip artifact for deployment (excluding node_modules)
         working-directory: ./frontend
         run: |
-          zip -r release.zip server.js package.json build/
+          zip -r release.zip server.js package.json package-lock.json build/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -76,5 +76,5 @@ jobs:
 
       - name: Execute npm i on Azure Web App
         run: |
-          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash -c \\\"cd /home/site/wwwroot/frontend && npm i --verbose\\\"\"}" --verbose
+          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash -c \\\"cd /home/site/wwwroot/frontend && npm ci --production\\\"\"}" --verbose
   
