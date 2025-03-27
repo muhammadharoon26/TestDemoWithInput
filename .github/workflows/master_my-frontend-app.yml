@@ -63,7 +63,22 @@ jobs:
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }}
           clean: true
 
-      - name: Install dependencies on Azure Web App
+      - name: Create install_dependencies.sh
+        run: |
+          echo '#!/bin/bash' > install_dependencies.sh
+          echo 'cd /home/site/wwwroot' >> install_dependencies.sh
+          echo 'npm install --production' >> install_dependencies.sh
+          echo 'echo "Dependencies installed successfully."' >> install_dependencies.sh
+          chmod +x install_dependencies.sh
+  
+      - name: Upload install_dependencies.sh to Azure Web App via FTPS
         run: |
           curl -T install_dependencies.sh --ftp-create-dirs -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" "ftp://waws-prod-blu-001.ftp.azurewebsites.windows.net/site/wwwroot/install_dependencies.sh"
-          curl -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" "ftp://waws-prod-blu-001.scm.azurewebsites.net/api/command" -H "Content-Type: application/json" --data-binary '{"command":"bash site/wwwroot/install_dependencies.sh"}'
+
+      - name: Execute install_dependencies.sh on Azure Web App
+        run: |
+          curl -u "my-frontend-app\$my-frontend-app:CpdGqMxe9xBu56CTJ4b8hnEj3g3xCD1NQpgyLpEyo8jflQBJbxRmSmyx3PJr" \
+            "https://waws-prod-blu-001.scm.azurewebsites.net/api/command" \
+            -H "Content-Type: application/json" \
+            --data-binary '{"command":"bash site/wwwroot/install_dependencies.sh"}'
+  
