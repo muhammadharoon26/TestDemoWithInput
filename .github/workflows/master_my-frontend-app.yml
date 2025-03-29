@@ -24,8 +24,8 @@ jobs:
         env:
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: |
-          yarn install
-          npm run build --if-present
+          yarn install --production --ignore-optional --network-timeout 300000
+          yarn build --if-present
 
       - name: Zip artifact for deployment (excluding node_modules)
         working-directory: ./frontend
@@ -61,6 +61,7 @@ jobs:
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_75AC8D35CE4A4213A950359D6C9CCAAC }}
+          clean: true
       # - name: Create install_dependencies.sh
       #   run: |
       #     echo '#!/bin/bash' > install_dependencies.sh
@@ -74,7 +75,7 @@ jobs:
       #   run: |
       #     curl -T install_dependencies.sh --ftp-create-dirs --ssl-reqd -u '${{ secrets.AZURE_FTPS_USERNAME }}:${{ secrets.AZURE_FTPS_PASSWORD }}' "ftps://waws-prod-yt1-069.ftp.azurewebsites.windows.net/site/wwwroot/frontend/install_dependencies.sh"
 
-      - name: Execute npm i on Azure Web App
+      - name: Execute yarn install on Azure Web App
         run: |
-          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash -c \\\"cd /home/site/wwwroot/frontend && yarn install\\\"\"}" --verbose
+          curl -X POST -u '$my-frontend-app:${{ secrets.AZURE_FTPS_PASSWORD }}' "https://my-frontend-app-eufggghjd0e3dcbt.scm.canadacentral-01.azurewebsites.net/api/command" -H "Content-Type: application/json" -d "{\"command\":\"bash -c \\\"cd /home/site/wwwroot/frontend && yarn install --production --ignore-optional --network-timeout 300000\\\"\"}" --verbose
   
